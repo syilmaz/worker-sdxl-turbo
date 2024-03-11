@@ -8,6 +8,7 @@ import io
 import time
 from PIL import Image
 from io import BytesIO
+import requests
 
 
 # If your handler runs inference on a model, load the model here.
@@ -23,13 +24,21 @@ def handler(job):
     """ Handler function that will be used to process jobs. """
     job_input = job['input']
     prompt = job_input['prompt']
-    image = job_input['image']
-    img = Image.open(BytesIO(base64.b64decode(image))).convert("RGB")
-    img.thumbnail((768, 768))
+    # image = job_input['image']
+    # img = Image.open(BytesIO(base64.b64decode(image))).convert("RGB")
+    # img.thumbnail((768, 768))
 
-    time_start = time.time()
-    image = pipe(prompt=prompt, num_inference_steps=2, guidance_scale=0.0, image=img).images[0]
-    print(f"Time taken: {time.time() - time_start}")
+    # time_start = time.time()
+    # image = pipe(prompt=prompt, num_inference_steps=2, guidance_scale=0.0, image=img).images[0]
+    # print(f"Time taken: {time.time() - time_start}")
+
+    url = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/1665_Girl_with_a_Pearl_Earring.jpg/800px-1665_Girl_with_a_Pearl_Earring.jpg"
+
+    response = requests.get(url)
+    image = Image.open(BytesIO(response.content)).convert("RGB")
+    image.thumbnail((768, 768))
+
+    image = pipe(prompt, image, num_inference_steps=2, strength=0.75, guidance_scale=1.5).images[0]
 
     buffer = io.BytesIO()
     image.save(buffer, format="PNG")
