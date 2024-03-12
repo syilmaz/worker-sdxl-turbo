@@ -68,7 +68,7 @@ def handler(job):
     )
 
     buffer = io.BytesIO()
-    results.save(buffer, format="PNG")
+    results.images[0].save(buffer, format="PNG")
     image_bytes = buffer.getvalue()
 
     return base64.b64encode(image_bytes).decode('utf-8')
