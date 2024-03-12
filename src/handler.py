@@ -43,7 +43,7 @@ def handler(job):
     # url = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/1665_Girl_with_a_Pearl_Earring.jpg/800px-1665_Girl_with_a_Pearl_Earring.jpg"
 
     # response = requests.get(url)
-    image = Image.open(BytesIO(base64.b64decode(image))).convert("RGB")
+    image = Image.open(BytesIO(base64.b64decode(img))).convert("RGB")
 
     strength = 0.7
     steps = 2
